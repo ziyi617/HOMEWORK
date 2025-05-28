@@ -146,40 +146,42 @@ public class SubwaySystem {
             Line line = lines.get(lineName);
             List<Station> lineStations = line.getStations();
             
-            int stationIndex = -1;
+            int centerIndex = -1;
             for (int i = 0; i < lineStations.size(); i++) {
                 if (lineStations.get(i).getName().equals(stationName)) {
-                    stationIndex = i;
+                    centerIndex = i;
                     break;
                 }
             }
-            if (stationIndex == -1) continue;
+            if (centerIndex == -1) continue;
 
-            // 向左搜索（累加实际距离）
-            int leftDistance = 0;
-            for (int i = stationIndex - 1; i >= 0; i--) {
+            // 向左搜索（从中心站点的前一个站点开始，向线路起点方向）
+            int accumulatedDistance = 0;
+            for (int i = centerIndex - 1; i >= 0; i--) {
+                // 当前站点和下一个站点（即后一个站点，因为向左遍历，后一个站点是索引i+1）
                 String currentStation = lineStations.get(i).getName();
-                String nextStation = lineStations.get(i + 1).getName();
+                String nextStation = lineStations.get(i+1).getName();
+                // 获取相邻站点间的距离
                 int segmentDistance = line.getDistance(currentStation, nextStation);
-                leftDistance += segmentDistance;
-                
-                if (leftDistance <= n) {
-                    result.add(Map.entry(currentStation, Map.entry(lineName, leftDistance)));
+                accumulatedDistance += segmentDistance;
+                if (accumulatedDistance <= n) {
+                    // 记录当前站点，所属线路，以及累加距离
+                    result.add(Map.entry(currentStation, Map.entry(lineName, accumulatedDistance)));
                 } else {
                     break;
                 }
             }
 
-            // 向右搜索（累加实际距离）
-            int rightDistance = 0;
-            for (int i = stationIndex + 1; i < lineStations.size(); i++) {
+            // 向右搜索（从中心站点的后一个站点开始，向线路终点方向）
+            accumulatedDistance = 0;
+            for (int i = centerIndex + 1; i < lineStations.size(); i++) {
+                // 当前站点和前一个站点（即索引i-1）
                 String currentStation = lineStations.get(i).getName();
-                String prevStation = lineStations.get(i - 1).getName();
+                String prevStation = lineStations.get(i-1).getName();
                 int segmentDistance = line.getDistance(prevStation, currentStation);
-                rightDistance += segmentDistance;
-                
-                if (rightDistance <= n) {
-                    result.add(Map.entry(currentStation, Map.entry(lineName, rightDistance)));
+                accumulatedDistance += segmentDistance;
+                if (accumulatedDistance <= n) {
+                    result.add(Map.entry(currentStation, Map.entry(lineName, accumulatedDistance)));
                 } else {
                     break;
                 }

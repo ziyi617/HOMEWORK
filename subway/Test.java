@@ -17,10 +17,11 @@ public class Test {
             
             // 测试2: 获取附近站点
             System.out.println("\n附近站点:");
-            Set<Map.Entry<String, Map.Entry<String, Integer>>> nearby = subway.getNearbyStations("古田二路",3);
+            Set<Map.Entry<String, Map.Entry<String, Integer>>> nearby = subway.getNearbyStations("古田二路",3000);
             nearby.forEach(entry -> 
                 System.out.println(entry.getKey() + ": " + entry.getValue().getKey() + ", " + entry.getValue().getValue()));
             
+                
             // 测试3: 获取所有路径
             System.out.println("\n所有路径:");
             Set<List<String>> allPaths = subway.getAllPaths("武昌火车站", "汉口火车站");
