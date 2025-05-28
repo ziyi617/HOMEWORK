@@ -25,7 +25,7 @@ public class SubwaySystem {
                     continue;
                 }
                 
-                // 检测汉字线路标题（如"1号线站点间距"、"二号线站点信息"）
+                // 检测汉字线路标题
                 if (line.contains("号线")) {
                     // 提取汉字线路名称（如"1号线"、"二号线"）
                     int index = line.indexOf("号线");
@@ -36,20 +36,20 @@ public class SubwaySystem {
                     continue;
                 }
                 
-                // 跳过表头行（如"站点名称 间距（KM）"）
+                // 跳过"站点名称 间距（KM）"
                 if (skipNextLine || line.contains("站点名称") || line.contains("间距")) {
                     skipNextLine = false;
                     continue;
                 }
                 
-                // 解析站点数据（支持多种分隔符：---、——、~）
+               
                 if (currentLineName != null && (line.contains("---") || line.contains("——") || line.contains("~"))) {
-                    // 统一替换不同分隔符
+                  
                     String normalizedLine = line.replace("——", "---").replace("~", "---");
                     String[] parts = normalizedLine.split("---|\\s+");
                     List<String> validParts = new ArrayList<>();
                     
-                    // 过滤空字符串
+                   
                     for (String part : parts) {
                         if (!part.isEmpty() && !part.equals("KM") && !part.equals("（KM）")) {
                             validParts.add(part);
@@ -60,16 +60,15 @@ public class SubwaySystem {
                         String station1 = validParts.get(0);
                         String station2 = validParts.get(1);
                         double distance = 0;
-                        
-                        // 解析距离（可能在第2或第3个位置）
+                       
                         if (validParts.size() >= 3) {
                             try {
                                 distance = Double.parseDouble(validParts.get(2)) * 1000; // KM转米
                             } catch (NumberFormatException e) {
-                                // 如果第三个部分不是数字，尝试第二个部分
+                          
                                 try {
                                     distance = Double.parseDouble(validParts.get(1)) * 1000;
-                                    station2 = validParts.get(0); // 调整站点位置
+                                    station2 = validParts.get(0);
                                 } catch (NumberFormatException ex) {
                                     System.err.println("距离解析失败: " + line);
                                     continue;
@@ -93,7 +92,7 @@ public class SubwaySystem {
         
         Line currentLine = lines.computeIfAbsent(lineName, Line::new);
         
-        // 处理站点名称中的括号内容（如"华中科技大学(地铁站)"）
+     
         station1 = cleanStationName(station1);
         station2 = cleanStationName(station2);
         
@@ -109,15 +108,14 @@ public class SubwaySystem {
             currentLine.addStation(s2);
         }
         
-        // 添加双向距离
+   
         currentLine.addDistance(station1, station2, distance);
     }
 
-    // 清理站点名称中的无关字符
     private String cleanStationName(String name) {
-        // 移除括号内容（如"(地铁站)"）
+    
         name = name.replaceAll("\\(.*?\\)", "");
-        // 移除特殊符号
+     
         name = name.replaceAll("[【】]", "");
         return name.trim();
     }
@@ -125,6 +123,7 @@ public class SubwaySystem {
     public int getStationCount() {
         return stations.size();
     }
+    
 // 1) 识别所有地铁中转站
     public Set<Map.Entry<String, Set<String>>> getTransferStations() {
         return stations.entrySet().stream()
@@ -158,14 +157,14 @@ public class SubwaySystem {
             // 向左搜索（从中心站点的前一个站点开始，向线路起点方向）
             int accumulatedDistance = 0;
             for (int i = centerIndex - 1; i >= 0; i--) {
-                // 当前站点和下一个站点（即后一个站点，因为向左遍历，后一个站点是索引i+1）
+                
                 String currentStation = lineStations.get(i).getName();
                 String nextStation = lineStations.get(i+1).getName();
                 // 获取相邻站点间的距离
                 int segmentDistance = line.getDistance(currentStation, nextStation);
                 accumulatedDistance += segmentDistance;
                 if (accumulatedDistance <= n) {
-                    // 记录当前站点，所属线路，以及累加距离
+                    
                     result.add(Map.entry(currentStation, Map.entry(lineName, accumulatedDistance)));
                 } else {
                     break;
@@ -175,7 +174,7 @@ public class SubwaySystem {
             // 向右搜索（从中心站点的后一个站点开始，向线路终点方向）
             accumulatedDistance = 0;
             for (int i = centerIndex + 1; i < lineStations.size(); i++) {
-                // 当前站点和前一个站点（即索引i-1）
+             
                 String currentStation = lineStations.get(i).getName();
                 String prevStation = lineStations.get(i-1).getName();
                 int segmentDistance = line.getDistance(prevStation, currentStation);
@@ -243,7 +242,7 @@ public class SubwaySystem {
         }
     }
 
- // 4) 获取最短路径 (使用Dijkstra算法)
+ // 4) 获取最短路径
     public Path getShortestPath(String start, String end) {
         if (!stations.containsKey(start) || !stations.containsKey(end)) {
             throw new IllegalArgumentException("Station not found");
@@ -253,7 +252,7 @@ public class SubwaySystem {
         Map<String, String> previous = new HashMap<>();
         PriorityQueue<String> queue = new PriorityQueue<>(Comparator.comparingInt(distances::get));
 
-        // 初始化
+       
         for (String station : stations.keySet()) {
             if (station.equals(start)) {
                 distances.put(station, 0);
@@ -307,7 +306,7 @@ public class SubwaySystem {
             }
         }
 
-        // 构建路径
+     
         List<String> path = new ArrayList<>();
         String current = end;
         while (current != null) {
@@ -362,7 +361,7 @@ public class SubwaySystem {
         if (distance <= 12) return 4;
         if (distance <= 18) return 5;
         if (distance <= 24) return 6;
-        return 7; // 超过24公里
+        return 7; 
     }
 
     // 7) 计算日票票价
