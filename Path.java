@@ -1,9 +1,7 @@
-import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 class Path {
-    private List<String> stations;
-    private int distance;
+    private final List<String> stations;
+    private final int distance;
 
     public Path(List<String> stations, int distance) {
         this.stations = stations;

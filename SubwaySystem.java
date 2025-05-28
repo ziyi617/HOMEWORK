@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 class SubwaySystem {
-    private Map<String, Station> stations;
-    private Map<String, Line> lines;
+    private final Map<String, Station> stations;
+    private final Map<String, Line> lines;
 
     public SubwaySystem() {
         stations = new HashMap<>();

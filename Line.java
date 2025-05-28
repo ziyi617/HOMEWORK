@@ -1,10 +1,10 @@
-import java.io.*;
+
 import java.util.*;
-import java.util.stream.Collectors;
+
 public class Line {
-	private String name;
-	private List<Station> stations;
-	private Map<String, Map<String, Integer>> distances;
+	private final String name;
+	private final List<Station> stations;
+	private final Map<String, Map<String, Integer>> distances;
 
 	public Line(String name) {
 		this.name = name;
