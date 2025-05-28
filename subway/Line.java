@@ -1,10 +1,12 @@
-
-import java.util.*;
-
+package subway;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 public class Line {
-	private final String name;
-	private final List<Station> stations;
-	private final Map<String, Map<String, Integer>> distances;
+	private String name;
+	private List<Station> stations;
+	private Map<String, Map<String, Integer>> distances;
 
 	public Line(String name) {
 		this.name = name;

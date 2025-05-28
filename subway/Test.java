@@ -1,11 +1,13 @@
+package subway;
 import java.io.*;
 import java.util.*;
 public class Test {
-    public static void main(String[] args) {
+	public static void main(String[] args) {
         SubwaySystem subway = new SubwaySystem();
         try {
             // 加载数据
             subway.loadFromFile("subway.txt");
+            System.out.println(subway.getStationCount());
             
             // 测试1: 获取中转站
             System.out.println("中转站:");
@@ -15,7 +17,7 @@ public class Test {
             
             // 测试2: 获取附近站点
             System.out.println("\n附近站点:");
-            Set<Map.Entry<String, Map.Entry<String, Integer>>> nearby = subway.getNearbyStations("华中科技大学站", 1);
+            Set<Map.Entry<String, Map.Entry<String, Integer>>> nearby = subway.getNearbyStations("古田二路",3);
             nearby.forEach(entry -> 
                 System.out.println(entry.getKey() + ": " + entry.getValue().getKey() + ", " + entry.getValue().getValue()));
             
@@ -42,4 +44,5 @@ public class Test {
             System.err.println("加载文件失败: " + e.getMessage());
         }
     }
+
 }

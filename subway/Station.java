@@ -1,6 +1,7 @@
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
+package subway;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 public class Station {
 	private String name;
 	private Set<String> lines;
