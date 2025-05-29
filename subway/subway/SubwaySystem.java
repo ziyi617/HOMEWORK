@@ -123,7 +123,13 @@ public class SubwaySystem {
     public int getStationCount() {
         return stations.size();
     }
-    
+    public Map<String, Station> getStations() {
+        return Collections.unmodifiableMap(stations);
+    }
+
+    public Map<String, Line> getLines() {
+        return Collections.unmodifiableMap(lines);
+    }
 // 1) 识别所有地铁中转站
     public Set<Map.Entry<String, Set<String>>> getTransferStations() {
         return stations.entrySet().stream()
